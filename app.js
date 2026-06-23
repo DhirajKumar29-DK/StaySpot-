@@ -10,7 +10,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utlis/ExpressError.js");
 const session = require("express-session");
-const { MongoStore } = require("connect-mongo");
+const  MongoStore  = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -22,6 +22,7 @@ const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
 const dbUrl = process.env.ATLASDB_URL;
+
 
 main()
 .then(() => {
@@ -66,11 +67,6 @@ const sessionOptions = {
     },
 };
 
-// app.get("/", (req, res) => {
-//     res.send("Hello I m Working")
-// });
-
-
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -92,6 +88,11 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send(err.message);
+});
+
+// app.js mein yeh add kar agar nahi hai
+app.get("/", (req, res) => {
+    res.redirect("/listings");
 });
 
 app.use("/listings", listingRouter)
